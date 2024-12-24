@@ -14,5 +14,12 @@
   "keywords": [],
   "author": "Nick the Sick",
   "license": "SEE LICENSE IN LICENSE.md",
-  "dependencies": {}
+  "dependencies": {
+    "markdown-it-mark": "^4.0.0",
+    "tiptap-markdown": "^0.8.10"
+  },
+  "devDependencies": {
+    "@types/markdown-it": "^14.1.2",
+    "raw-loader": "^4.0.2"
+  }
 }

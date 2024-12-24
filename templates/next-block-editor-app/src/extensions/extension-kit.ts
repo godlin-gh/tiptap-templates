@@ -47,6 +47,7 @@ import {
   TaskItem,
   TaskList,
   UniqueID,
+  Markdown,
 } from '.'
 
 import { ImageUpload } from './ImageUpload'
@@ -58,6 +59,7 @@ interface ExtensionKitProps {
 }
 
 export const ExtensionKit = ({ provider }: ExtensionKitProps) => [
+  Markdown,
   Document,
   Columns,
   TaskList,
