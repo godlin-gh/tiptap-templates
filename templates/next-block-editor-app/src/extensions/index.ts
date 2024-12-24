@@ -28,6 +28,7 @@ export { Details } from '@tiptap-pro/extension-details'
 export { DetailsContent } from '@tiptap-pro/extension-details-content'
 export { DetailsSummary } from '@tiptap-pro/extension-details-summary'
 export { UniqueID } from '@tiptap-pro/extension-unique-id'
+export { Blockquote } from '@tiptap/extension-blockquote'
 
 export { Selection } from './Selection'
 export { AiWriter } from './AiWriter'

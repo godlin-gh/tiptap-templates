@@ -48,6 +48,7 @@ import {
   TaskList,
   UniqueID,
   Markdown,
+  Blockquote,
 } from '.'
 
 import { ImageUpload } from './ImageUpload'
@@ -158,7 +159,8 @@ export const ExtensionKit = ({ provider }: ExtensionKitProps) => [
   SlashCommand,
   Focus,
   Figcaption,
-  BlockquoteFigure,
+  // BlockquoteFigure,
+  Blockquote,
   Dropcursor.configure({
     width: 2,
     class: 'ProseMirror-dropcursor border-black',
