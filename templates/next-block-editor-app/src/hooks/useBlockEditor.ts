@@ -49,11 +49,11 @@ export const useBlockEditor = ({
           field: 'prosemirror',
           ySyncOptions: {
             permanentUserData,
-            colors: [
-              { light: '#ecd44433', dark: '#ecd444' },
-              { light: '#ee635233', dark: '#ee6352' },
-              { light: '#6eeb8333', dark: '#6eeb83' },
-            ],
+            // colors: [
+            //   { light: '#ecd44433', dark: '#ecd444' },
+            //   { light: '#ee635233', dark: '#ee6352' },
+            //   { light: '#6eeb8333', dark: '#6eeb83' },
+            // ],
           },
         }),
         // provider
