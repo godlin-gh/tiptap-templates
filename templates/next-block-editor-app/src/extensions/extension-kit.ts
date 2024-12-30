@@ -5,10 +5,11 @@ import { HocuspocusProvider } from '@hocuspocus/provider'
 import { API } from '@/lib/api'
 
 import {
-  BlockquoteFigure,
   CharacterCount,
   CodeBlock,
   Color,
+  Column,
+  Columns,
   Details,
   DetailsContent,
   DetailsSummary,
@@ -25,6 +26,8 @@ import {
   HorizontalRule,
   ImageBlock,
   Link,
+  Markdown,
+  Paragraph,
   Placeholder,
   Selection,
   SlashCommand,
@@ -32,28 +35,25 @@ import {
   Subscript,
   Superscript,
   Table,
-  TableOfContents,
   TableCell,
   TableHeader,
+  TableOfContents,
   TableRow,
+  TaskItem,
+  TaskList,
   TextAlign,
   TextStyle,
   TrailingNode,
   Typography,
   Underline,
-  emojiSuggestion,
-  Columns,
-  Column,
-  TaskItem,
-  TaskList,
   UniqueID,
-  Markdown,
-  Blockquote,
+  YChange,
+  emojiSuggestion,
 } from '.'
 
+import { isChangeOrigin } from '@tiptap/extension-collaboration'
 import { ImageUpload } from './ImageUpload'
 import { TableOfContentsNode } from './TableOfContentsNode'
-import { isChangeOrigin } from '@tiptap/extension-collaboration'
 
 interface ExtensionKitProps {
   provider?: HocuspocusProvider | null
@@ -82,7 +82,8 @@ export const ExtensionKit = ({ provider }: ExtensionKitProps) => [
     dropcursor: false,
     heading: false,
     horizontalRule: false,
-    blockquote: false,
+    // blockquote: false,
+    paragraph: false,
     history: false,
     codeBlock: false,
   }),
@@ -160,11 +161,12 @@ export const ExtensionKit = ({ provider }: ExtensionKitProps) => [
   Focus,
   Figcaption,
   // BlockquoteFigure,
-  Blockquote,
   Dropcursor.configure({
     width: 2,
     class: 'ProseMirror-dropcursor border-black',
   }),
+  Paragraph,
+  YChange,
 ]
 
 export default ExtensionKit

@@ -1,16 +1,16 @@
-import { Icon } from '@/components/ui/Icon'
-import { EditorInfo } from './EditorInfo'
-import { EditorUser } from '../types'
-import { WebSocketStatus } from '@hocuspocus/provider'
-import { Toolbar } from '@/components/ui/Toolbar'
-import { Editor } from '@tiptap/core'
-import { useEditorState } from '@tiptap/react'
-import { Button } from '@/components/ui/Button'
-import { TextSelection } from '@tiptap/pm/state'
-import { DOMParser } from '@tiptap/pm/model'
-import { Slice } from '@tiptap/pm/model'
 import { delay } from '@/common/utils'
+import { Button } from '@/components/ui/Button'
+import { Icon } from '@/components/ui/Icon'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Toolbar } from '@/components/ui/Toolbar'
 import content from '@/lib/data/content.md'
+import { Editor } from '@tiptap/core'
+import { DOMParser, Slice } from '@tiptap/pm/model'
+import { TextSelection } from '@tiptap/pm/state'
+import { useEditorState } from '@tiptap/react'
+import { useCallback, useState } from 'react'
+import { ySyncPluginKey } from 'y-prosemirror'
+import * as Y from 'yjs'
 
 function parseMarkdown(editor: Editor, markdown: string) {
   const html = editor.storage.markdown.parser.parse(markdown) as string
@@ -44,11 +44,14 @@ export type EditorHeaderProps = {
   isSidebarOpen?: boolean
   toggleSidebar?: () => void
   editor: Editor
-  collabState: WebSocketStatus
-  users: EditorUser[]
+  // collabState: WebSocketStatus
+  // users: EditorUser[]
+  ydoc?: Y.Doc
 }
 
-export const EditorHeader = ({ editor, collabState, users, isSidebarOpen, toggleSidebar }: EditorHeaderProps) => {
+export const EditorHeader = ({ editor, isSidebarOpen, toggleSidebar, ydoc }: EditorHeaderProps) => {
+  const [versions, setVersions] = useState<{ timestamp: number; snapshot: Y.Snapshot }[]>([])
+
   const { characters, words } = useEditorState({
     editor,
     selector: (ctx): { characters: number; words: number } => {
@@ -56,6 +59,35 @@ export const EditorHeader = ({ editor, collabState, users, isSidebarOpen, toggle
       return { characters: characters(), words: words() }
     },
   })
+
+  const handleVersionChange = useCallback(
+    (value: string) => {
+      if (!editor || !value) return
+
+      if (value === 'reset') {
+        const binding = ySyncPluginKey.getState(editor.view.state).binding
+        if (binding != null) {
+          binding.unrenderSnapshot()
+        }
+        return
+      }
+
+      const timestamp = parseInt(value)
+      const version = versions.find(v => v.timestamp === timestamp)
+      if (!version) return
+
+      const index = versions.findIndex(v => v.timestamp === timestamp)
+      const prevVersion = index > 0 ? versions[index - 1] : undefined
+
+      editor.view.dispatch(
+        editor.view.state.tr.setMeta(ySyncPluginKey, {
+          snapshot: version.snapshot,
+          prevSnapshot: prevVersion?.snapshot || Y.emptySnapshot,
+        }),
+      )
+    },
+    [editor, versions],
+  )
 
   return (
     <div className="flex flex-row items-center justify-between flex-none py-2 pl-6 pr-3 text-black bg-white border-b border-neutral-200 dark:bg-black dark:text-white dark:border-neutral-800">
@@ -69,12 +101,46 @@ export const EditorHeader = ({ editor, collabState, users, isSidebarOpen, toggle
           >
             <Icon name={isSidebarOpen ? 'PanelLeftClose' : 'PanelLeft'} />
           </Toolbar.Button>
-          <Button variant="outline" onClick={() => insertMarkdown(editor, content)}>
+          <Button variant="tertiary" onClick={() => insertMarkdown(editor, content)}>
             Insert markdown
           </Button>
+          {ydoc && (
+            <>
+              <Button
+                variant="tertiary"
+                onClick={() => {
+                  const snapshot = Y.snapshot(ydoc)
+                  setVersions([
+                    ...versions,
+                    {
+                      timestamp: Date.now(),
+                      snapshot,
+                    },
+                  ])
+                }}
+              >
+                Save version
+              </Button>
+              <Select onValueChange={handleVersionChange}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="select a version..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem key="reset" value="reset">
+                    Reset
+                  </SelectItem>
+                  {versions.map((version, index) => (
+                    <SelectItem key={index} value={version.timestamp.toString()}>
+                      {new Date(version.timestamp).toLocaleString()}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </>
+          )}
         </div>
       </div>
-      <EditorInfo characters={characters} words={words} collabState={collabState} users={users} />
+      {/* <EditorInfo characters={characters} words={words} collabState={collabState} users={users} /> */}
     </div>
   )
 }

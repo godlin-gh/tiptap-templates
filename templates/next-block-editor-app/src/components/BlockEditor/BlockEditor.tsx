@@ -1,5 +1,5 @@
 import { EditorContent } from '@tiptap/react'
-import React, { useRef } from 'react'
+import { useRef } from 'react'
 
 import { LinkMenu } from '@/components/menus'
 
@@ -11,30 +11,17 @@ import { Sidebar } from '@/components/Sidebar'
 import ImageBlockMenu from '@/extensions/ImageBlock/components/ImageBlockMenu'
 import { ColumnsMenu } from '@/extensions/MultiColumn/menus'
 import { TableColumnMenu, TableRowMenu } from '@/extensions/Table/menus'
-import { EditorHeader } from './components/EditorHeader'
-import { TextMenu } from '../menus/TextMenu'
-import { ContentItemMenu } from '../menus/ContentItemMenu'
 import { useSidebar } from '@/hooks/useSidebar'
 import * as Y from 'yjs'
-import { TiptapCollabProvider } from '@hocuspocus/provider'
+import { ContentItemMenu } from '../menus/ContentItemMenu'
+import { TextMenu } from '../menus/TextMenu'
+import { EditorHeader } from './components/EditorHeader'
 
-export const BlockEditor = ({
-  aiToken,
-  ydoc,
-  provider,
-}: {
-  aiToken?: string
-  ydoc: Y.Doc | null
-  provider?: TiptapCollabProvider | null | undefined
-}) => {
+export const BlockEditor = ({ ydoc, permanentUserData }: { ydoc?: Y.Doc; permanentUserData?: Y.PermanentUserData }) => {
   const menuContainerRef = useRef(null)
 
   const leftSidebar = useSidebar()
-  const { editor, users, collabState } = useBlockEditor({ aiToken, ydoc, provider })
-
-  if (!editor || !users) {
-    return null
-  }
+  const { editor } = useBlockEditor({ ydoc, permanentUserData })
 
   return (
     <div className="flex h-full" ref={menuContainerRef}>
@@ -42,10 +29,9 @@ export const BlockEditor = ({
       <div className="relative flex flex-col flex-1 h-full overflow-hidden">
         <EditorHeader
           editor={editor}
-          collabState={collabState}
-          users={users}
           isSidebarOpen={leftSidebar.isOpen}
           toggleSidebar={leftSidebar.toggle}
+          ydoc={ydoc}
         />
         <EditorContent editor={editor} className="flex-1 overflow-y-auto" />
         <ContentItemMenu editor={editor} />
