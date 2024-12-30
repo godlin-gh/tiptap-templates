@@ -3,6 +3,7 @@ import { useEditor, useEditorState } from '@tiptap/react'
 import type { AnyExtension, Editor } from '@tiptap/core'
 import Collaboration from '@tiptap/extension-collaboration'
 import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
+// import CollaborationHistory from '@tiptap/extension-collaboration-history'
 import { TiptapCollabProvider, WebSocketStatus } from '@hocuspocus/provider'
 import type { Doc as YDoc } from 'yjs'
 
