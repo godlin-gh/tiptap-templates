@@ -1,6 +1,5 @@
 import { Mark } from '@tiptap/core'
-import { hoverWrapper } from './utils'
-import { calcYchangeClass } from './utils'
+import { calcYchangeClass, hoverWrapper } from './utils'
 
 export const YChange = Mark.create({
   name: 'ychange',
@@ -25,7 +24,7 @@ export const YChange = Mark.create({
         // style: calcYchangeStyle(node.attrs),
         class: calcYchangeClass(node.attrs),
       },
-      // ...hoverWrapper(node.attrs, [0]),
+      ...hoverWrapper(node.attrs, [0]),
     ]
   },
 })

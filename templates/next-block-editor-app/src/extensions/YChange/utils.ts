@@ -12,9 +12,9 @@ export const calcYchangeStyle = (ychange: Record<string, any>) => {
 export const calcYchangeClass = (ychange: Record<string, any>) => {
   switch (ychange.type) {
     case 'removed':
-      return `bg-teal-200 line-through`
+      return `bg-teal-100 line-through`
     case 'added':
-      return `bg-teal-400`
+      return `bg-teal-300`
     default:
       return ''
   }
@@ -22,7 +22,7 @@ export const calcYchangeClass = (ychange: Record<string, any>) => {
 
 export const calcYchangeDomAttrs = (attrs: Record<string, any>, domAttrs: Record<string, any> = {}) => {
   domAttrs = Object.assign({}, domAttrs)
-  if (attrs.ychange !== null) {
+  if (attrs.ychange) {
     domAttrs.ychange_user = attrs.ychange.user
     domAttrs.ychange_type = attrs.ychange.type
     domAttrs.ychange_color = attrs.ychange.color.light
@@ -32,17 +32,18 @@ export const calcYchangeDomAttrs = (attrs: Record<string, any>, domAttrs: Record
   return domAttrs
 }
 
-export const hoverWrapper = (ychange: any, els: Array<any>) =>
-  ychange === null
-    ? els
-    : [
-        [
-          'span',
-          {
-            class: `ychange-hover ${calcYchangeClass(ychange)}`,
-            // style: `background-color:${ychange.color.dark}`,
-          },
-          ychange.user || 'Unknown',
-        ],
-        ['span', ...els],
-      ]
+export const hoverWrapper = (ychange: any, els: Array<any>) => els
+// export const hoverWrapper = (ychange: any, els: Array<any>) =>
+//   ychange === null
+//     ? els
+//     : [
+//         [
+//           'span',
+//           {
+//             class: `ychange-hover ${calcYchangeClass(ychange)}`,
+//             // style: `background-color:${ychange.color.dark}`,
+//           },
+//           ychange.user || 'Unknown',
+//         ],
+//         ['span', ...els],
+//       ]

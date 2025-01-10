@@ -5,6 +5,7 @@ import { HocuspocusProvider } from '@hocuspocus/provider'
 import { API } from '@/lib/api'
 
 import {
+  Blockquote,
   CharacterCount,
   CodeBlock,
   Color,
@@ -82,7 +83,7 @@ export const ExtensionKit = ({ provider }: ExtensionKitProps) => [
     dropcursor: false,
     heading: false,
     horizontalRule: false,
-    // blockquote: false,
+    blockquote: false,
     paragraph: false,
     history: false,
     codeBlock: false,
@@ -166,6 +167,7 @@ export const ExtensionKit = ({ provider }: ExtensionKitProps) => [
     class: 'ProseMirror-dropcursor border-black',
   }),
   Paragraph,
+  Blockquote,
   YChange,
 ]
 

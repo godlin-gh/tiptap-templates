@@ -40,6 +40,15 @@ async function insertMarkdown(editor: Editor, md: string) {
   }
 }
 
+async function insertMarkdown2(editor: Editor, md: string) {
+  const { selection, tr } = editor.state
+  const doc = parseMarkdown(editor, md)
+  const { openStart, openEnd } = selection.content()
+  const slice = new Slice(doc.content, openStart, openEnd)
+  tr.replaceSelection(slice).scrollIntoView()
+  editor.view.dispatch(tr)
+}
+
 export type EditorHeaderProps = {
   isSidebarOpen?: boolean
   toggleSidebar?: () => void
@@ -101,7 +110,7 @@ export const EditorHeader = ({ editor, isSidebarOpen, toggleSidebar, ydoc }: Edi
           >
             <Icon name={isSidebarOpen ? 'PanelLeftClose' : 'PanelLeft'} />
           </Toolbar.Button>
-          <Button variant="tertiary" onClick={() => insertMarkdown(editor, content)}>
+          <Button variant="tertiary" onClick={() => insertMarkdown2(editor, content)}>
             Insert markdown
           </Button>
           {ydoc && (
